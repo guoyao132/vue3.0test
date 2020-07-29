@@ -2,17 +2,8 @@
   <div class="container" draggable="false" @mousedown="returnFalse">
     <div class="album" ref="album" @mousedown="returnFalse">
 <!--      <img src="@/assets/logo.png" alt=""><img src="@/assets/logo.png" alt=""><img src="@/assets/logo.png" alt=""><img src="@/assets/logo.png" alt=""><img src="@/assets/logo.png" alt=""><img src="@/assets/logo.png" alt=""><img src="@/assets/logo.png" alt=""><img src="@/assets/logo.png" alt=""><img src="@/assets/logo.png" alt=""><img src="@/assets/logo.png" alt=""><img src="@/assets/logo.png" alt="">-->
-      <div class="img" ref="img"><img src="@/assets/logo.png" alt=""></div>
-      <div class="img" ref="img"><img src="@/assets/logo.png" alt=""></div>
-      <div class="img" ref="img"><img src="@/assets/logo.png" alt=""></div>
-      <div class="img"><img src="@/assets/logo.png" alt=""></div>
-      <div class="img"><img src="@/assets/logo.png" alt=""></div>
-      <div class="img"><img src="@/assets/logo.png" alt=""></div>
-      <div class="img"><img src="@/assets/logo.png" alt=""></div>
-      <div class="img"><img src="@/assets/logo.png" alt=""></div>
-      <div class="img"><img src="@/assets/logo.png" alt=""></div>
-      <div class="img"><img src="@/assets/logo.png" alt=""></div>
-      <div class="img"><img src="@/assets/logo.png" alt=""></div>
+      <div class="img img1" v-for="(item, index) in img1" ><img :src="item" alt=""></div>
+      <div class="img img2" v-for="(item, index) in img2" ><img :src="item" alt=""></div>
     </div>
   </div>
   <!-- 如何设置3D布局
@@ -22,6 +13,26 @@
 </template>
 <script>
   export default {
+    data(){
+      return {
+        img1: [
+          './logo.png',
+          './logo.png',
+          './logo.png',
+          './logo.png',
+          './logo.png',
+          './logo.png',
+        ],
+        img2: [
+          './logo.png',
+          './logo.png',
+          './logo.png',
+          './logo.png',
+          './logo.png',
+          './logo.png',
+        ],
+      }
+    },
     methods: {
       returnFalse (e) {
         e.preventDefault()
@@ -29,8 +40,9 @@
     },
     mounted () {
       var album = this.$refs.album
-      console.log(this.$refs.img);
-      var imgs = this.$refs.album.children
+      window.aa = this.$refs;
+      var imgs = document.getElementsByClassName('img1')
+      var imgs2 = document.getElementsByClassName('img2')
       var len = imgs.length
       var unitDeg = 360 / len
       var newX, newY, lastX, lastY, minusX, minusY
@@ -40,6 +52,10 @@
       this.$nextTick(() => {
         Array.prototype.forEach.call(imgs, (it, i, arr) => {
           it.style.transform = `rotateY(${i * unitDeg}deg) translateZ(300px)`
+          it.onmousedown = this.returnFalse
+        })
+        Array.prototype.forEach.call(imgs2, (it, i, arr) => {
+          it.style.transform = `rotateX(40deg) rotateY(${i * unitDeg}deg) translateZ(300px)`
           it.onmousedown = this.returnFalse
         })
         //   鼠标移动 相册旋转 改变album的transform 的rotateX 和 rotateY的值
@@ -97,9 +113,15 @@
         justify-content: center;
         transform: rotateY(0) translateZ(0);
         transition: all 1s ease 0.9s;
+        overflow: hidden;
+
+        &.img2{
+          transform-origin: center center 300px;
+        }
+
         img{
           height: 100%;
-          -webkit-box-reflect: below 5px -webkit-linear-gradient(top,rgba(250,250,250,0),rgba(250,250,250,.0) 30%,rgba(250,250,250,0.3));
+          /*-webkit-box-reflect: below 5px -webkit-linear-gradient(top,rgba(250,250,250,0),rgba(250,250,250,.0) 30%,rgba(250,250,250,0.3));*/
         }
       }
     }
